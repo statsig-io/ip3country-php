@@ -17,13 +17,13 @@ This site or product includes IP2Location LITE data available from <a href="http
 ## Usage
 
 ```bash
-$ composer require ip3country
+$ composer require statsig/ip3country
 ```
 
 ```php
 // import
 require_once __DIR__ . '/../vendor/autoload.php';
-use IP3Country\IP3Country;
+use ip3country\IP3Country;
 
 // Initialize
 $ip3c = new IP3Country();
