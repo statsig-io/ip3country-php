@@ -67,4 +67,33 @@ class TestCountries extends PHPUnit_Framework_TestCase {
             $this->assertEquals($value, $computed);
         }
     }
+
+    public function testExhaustive() {
+        $ip3c_private = new ReflectionClass(get_class($this->ip3c));
+        $ip_ranges = $ip3c_private->getProperty("ipRanges");
+        $ip_ranges->setAccessible(true);
+        $ranges = $ip_ranges->getValue($this->ip3c);
+
+        $country_codes = $ip3c_private->getProperty("countryCodes");
+        $country_codes->setAccessible(true);
+        $ccs = $country_codes->getValue($this->ip3c);
+
+        for ($ii = 1; $ii < count($ranges); $ii++) {
+            $max = $ranges[$ii];
+            $min = $ranges[$ii - 1];
+            $expected = $ccs[$ii];
+
+            $result = $this->ip3c->lookup($min);
+            if ($result === null) {
+                $result = "--";
+            }
+            $this->assertEquals($expected, $result);
+
+            $result = $this->ip3c->lookup($max - 1);
+            if ($result === null) {
+                $result = "--";
+            }
+            $this->assertEquals($expected, $result);
+        }
+    }
 }
